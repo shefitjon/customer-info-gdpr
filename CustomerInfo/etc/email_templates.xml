@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/email_templates.xsd">
+    <template id="gdpr_request_email_template" label="GDPR Request Email Template"
+              file="gdpr_request_email.html" type="html" module="Ruroc_CustomerInfo"
+              area="frontend"/>
+</config>

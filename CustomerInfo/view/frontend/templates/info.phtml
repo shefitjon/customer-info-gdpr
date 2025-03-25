@@ -1,0 +1,94 @@
+<?php
+    /** @var \Ruroc\CustomerInfo\Block\Customer\Info $block */
+    $customer = $block->getCustomer();
+    $orders = $block->getCustomerOrders();
+?>
+
+<div class="customer-info-page" data-bind="scope: 'customer-info'">
+
+    <div class="section cd-section">
+        <div class="section-title">
+            <div class="title-wrapper">
+                <?= $block->escapeHtml(__('Customer Details')) ?>
+            </div>
+        </div>
+        <div class="section-content">
+            <div class="content-wrapper">
+                <div class="name-wrapper">
+                    <span class="left-text"><?= $block->escapeHtml(__('Name')) ?>: </span>
+                    <span class="right-text"><?= $block->escapeHtml($block->getName()) ?></span>
+                </div>
+                <div class="email-wrapper">
+                    <span class="left-text"><?= $block->escapeHtml(__('Email')) ?>:</span>
+                    <span class="right-text"><?= $block->escapeHtml($customer->getEmail()) ?></span>
+                </div>
+
+                <div class="phone-wrapper">
+                    <span class="left-text"><?= $block->escapeHtml(__('Phone')) ?>:</span>
+                    <span class="right-text">
+                        <?php
+                            $telephone = $customer->getCustomAttribute('telephone');
+                            echo $telephone ? $block->escapeHtml($telephone->getValue()) : __('Not provided');
+                        ?>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section oi-section">
+        <div class="section-title">
+            <div class="title-wrapper">
+                <?= $block->escapeHtml(__('Order Information')) ?>
+            </div>
+        </div>
+        <div class="section-content">
+            <div class="content-wrapper">
+                <?php if ($orders && count($orders) > 0): ?>
+                    <ul class="order-list">
+                        <?php foreach ($orders as $order): ?>
+                            <li>
+                                <strong><?= $block->escapeHtml(__('Order #')) ?>:</strong> <?= $block->escapeHtml($order->getIncrementId()) ?><br>
+                                <strong><?= $block->escapeHtml(__('Date')) ?>:</strong> <?= $block->escapeHtml($order->getCreatedAt()) ?><br>
+                                <strong><?= $block->escapeHtml(__('Total')) ?>:</strong> <?= $block->escapeHtml($block->getPriceFormat($order->getGrandTotal())) ?><br>
+                                <strong><?= $block->escapeHtml(__('Status')) ?>:</strong> <?= $block->escapeHtml($order->getStatus()) ?><br>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php else: ?>
+                    <p><?= $block->escapeHtml(__('No orders found.')) ?></p>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="section gdpr-section">
+        <div class="section-title">
+            <div class="title-wrapper">
+                <?= $block->escapeHtml(__('Data Deletion Request')) ?>
+            </div>
+        </div>
+        <div class="section-content">
+            <div class="content-wrapper">
+                <div class="gdpr-text">
+                    <?= $block->escapeHtml(__('You can request your data to be deleted by clicking the button below.')) ?>
+                </div>
+                <div class="gdpr-action">
+                    <button id="gdprRequestButton" type="button" class="action request-delete">
+                        <?= $block->escapeHtml(__('Request Data Deletion')) ?>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "gdprRequest": {
+                "gdprEmail": "<?= $block->escapeHtml($customer->getEmail()) ?>"
+        }
+    }
+}
+</script>
